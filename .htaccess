@@ -1,0 +1,4 @@
+<Files *.xml>
+ForceType application/octet-stream
+</Files>
+Options -Indexes
