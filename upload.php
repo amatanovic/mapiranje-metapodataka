@@ -101,10 +101,10 @@ if(!empty($downloadPoruka)) {
 ?>
 <html class="no-js" lang="en">
   <head>
-  <link rel="stylesheet" href="css/foundation.min.css" />
-  <link href="css/font-awesome.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="js/vendor/modernizr.js"></script>
+     <link rel="stylesheet" href="css/foundation.min.css" />
+     <link href="css/font-awesome.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="css/style.css" />
+     <script src="js/vendor/modernizr.js"></script>
   </head>
   <body>
 <div class="progress
