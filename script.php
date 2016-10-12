@@ -36,21 +36,21 @@
         $("#log").css("visibility", "hidden");
    });
 
-          $('#upload').bind('change', function() {
-              var uploaded = this.files.length;
-              if (uploaded === 0) {
-                  $("#odaberite").html("Odaberite datoteke");
-              }
-              else {
-                  $("#odaberite").html("Odabrano datoteka: " + this.files.length);
-              }
-
-          });
-
    $("#zatvoriNav").click(function() {
       window.close();
    });
 });
+
+      function promijeniTekstUpload() {
+          var uploaded = $('#upload').prop('files').length;
+          if (uploaded === 0) {
+              $("#odaberite").html("Odaberite datoteke");
+          }
+          else {
+              $("#odaberite").html("Odabrano datoteka: " + uploaded);
+          }
+      }
+
  function closeIFrame(){
      $('#log').css("visibility", "hidden");
      $("#upload").val("");

@@ -4,7 +4,7 @@
 <div class="large-5 large-push-4 columns">
     <div class="file-input-wrapper">
         <button id="odaberite" class="button expand">Odaberite datoteke</button>
-        <input name="upload[]" type="file" multiple="multiple" accept=".xml" id="upload" title=""/>
+        <input name="upload[]" type="file" multiple="multiple" accept=".xml" id="upload" title="" onchange="promijeniTekstUpload()"/>
     </div>
 </div>
 </div>
