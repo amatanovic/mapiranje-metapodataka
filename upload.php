@@ -1,6 +1,5 @@
 <?php
-function libxml_display_error($error)
-{
+function libxml_display_error($error) {
   $return = "Linija <span style='font-weight:bold'>$error->line</span>: ";
   $return .= "<span style='font-style:italic'>$error->message</span>";
 
@@ -28,61 +27,53 @@ session_start();
 $folderName = date('YmdHis', time()) . rand(0, 1000);
 if (count($_FILES['upload']['name']) > 5) {
   $poruke[] = "<i class='fa fa-close'></i> Prešli ste maksimalan dozvoljeni broj datoteka.";
-  goto kraj;
  }
- if (count($_FILES['upload']['name']) == 1 && $_FILES['upload']['name'][0] == "") {
+ else if (count($_FILES['upload']['name']) == 1 && $_FILES['upload']['name'][0] == "") {
   $poruke[] = "<i class='fa fa-close'></i> Nemate priloženih datoteka.";
-  goto kraj;
  }
-mkdir("./uploaded/". $folderName . "/output", 0777, true);
-$progress = count($_FILES['upload']['name']) * 3;
-$progressLoop = 0;
-for($index=0; $index<count($_FILES['upload']['name']); $index++) {  
-  $tmpFilePath = $_FILES['upload']['tmp_name'][$index];
-  if (pathinfo($_FILES['upload']['name'][$index], PATHINFO_EXTENSION) == 'xml'){
-    $newFilePath = "./uploaded/" . $folderName . "/" .  $_FILES['upload']['name'][$index];
-    if(move_uploaded_file($tmpFilePath, $newFilePath)) {
-      $progressLoop++;
-      $_SESSION["progress"]= $progressLoop / $progress * 100;
-      session_write_close();
-      session_start();
-      $dokument = new DOMDocument('1.0', 'UTF-8');
-      libxml_use_internal_errors(true);     
-      if ($dokument->load($newFilePath)) {
-           $saveName = pathinfo($newFilePath, PATHINFO_FILENAME);
-           $dcNS = $dokument->documentElement->getAttribute('xmlns:dc');
-           $mods = $dokument->documentElement->getAttribute('xmlns');
-           $modsNS = $dokument->documentElement->getAttribute('xmlns:mods');
-            if ($dcNS == "http://purl.org/dc/elements/1.1/") {
-              if ($dokument->schemaValidate('http://dublincore.org/schemas/xmls/qdc/2008/02/11/simpledc.xsd')) {
-               include "dc_mods.php";
-              }
-              else 
-              $poruke[] = "<i class='fa fa-close'></i> Datoteka " . $_FILES['upload']['name'][$index] . " nije valjana prema DC shemi i ima sljedeće pogreške:";
-              libxml_display_errors($poruke);
-            }
-           else if ($modsNS == "http://www.loc.gov/mods/v3" || $mods == "http://www.loc.gov/mods/v3") {
-              if ($dokument->schemaValidate('http://www.loc.gov/standards/mods/v3/mods-3-6.xsd')) {
-                include "mods_dc.php";
-              }
-              else 
-              $poruke[] = "<i class='fa fa-close'></i> Datoteka " . $_FILES['upload']['name'][$index] . " nije valjana prema MODS shemi i ima sljedeće pogreške:";
-              libxml_display_errors($poruke);
-            }
-            else 
-            $poruke[] = "<i class='fa fa-close'></i> Datoteku " . $_FILES['upload']['name'][$index] . " nije moguće mapirati.";
-      }
+ else {
+     $progress = count($_FILES['upload']['name']) * 3;
+     $progressLoop = 0;
+     mkdir("./uploaded/" . $folderName . "/output", 0777, true);
+     for ($index = 0; $index < count($_FILES['upload']['name']); $index++) {
+         $tmpFilePath = $_FILES['upload']['tmp_name'][$index];
+         if (pathinfo($_FILES['upload']['name'][$index], PATHINFO_EXTENSION) == 'xml') {
+             $newFilePath = "./uploaded/" . $folderName . "/" . $_FILES['upload']['name'][$index];
+             if (move_uploaded_file($tmpFilePath, $newFilePath)) {
+                 $progressLoop++;
+                 $_SESSION["progress"] = $progressLoop / $progress * 100;
+                 session_write_close();
+                 session_start();
+                 $dokument = new DOMDocument('1.0', 'UTF-8');
+                 libxml_use_internal_errors(true);
+                 if ($dokument->load($newFilePath)) {
+                     $saveName = pathinfo($newFilePath, PATHINFO_FILENAME);
+                     $dcNS = $dokument->documentElement->getAttribute('xmlns:dc');
+                     $mods = $dokument->documentElement->getAttribute('xmlns');
+                     $modsNS = $dokument->documentElement->getAttribute('xmlns:mods');
+                     if ($dcNS == "http://purl.org/dc/elements/1.1/") {
+                         if ($dokument->schemaValidate('http://dublincore.org/schemas/xmls/qdc/2008/02/11/simpledc.xsd')) {
+                             include "dc_mods.php";
+                         } else
+                             $poruke[] = "<i class='fa fa-close'></i> Datoteka " . $_FILES['upload']['name'][$index] . " nije valjana prema DC shemi i ima sljedeće pogreške:";
+                             libxml_display_errors($poruke);
+                     } else if ($modsNS == "http://www.loc.gov/mods/v3" || $mods == "http://www.loc.gov/mods/v3") {
+                         if ($dokument->schemaValidate('http://www.loc.gov/standards/mods/v3/mods-3-6.xsd')) {
+                             include "mods_dc.php";
+                         } else
+                             $poruke[] = "<i class='fa fa-close'></i> Datoteka " . $_FILES['upload']['name'][$index] . " nije valjana prema MODS shemi i ima sljedeće pogreške:";
+                             libxml_display_errors($poruke);
+                     } else
+                         $poruke[] = "<i class='fa fa-close'></i> Datoteku " . $_FILES['upload']['name'][$index] . " nije moguće mapirati.";
+                 } else
+                     $poruke[] = "<i class='fa fa-close'></i> Datoteka " . $_FILES['upload']['name'][$index] . " nije validan XML i ima sljedeće pogreške:";
+                     libxml_display_errors($poruke);
+             }
 
-      else
-      $poruke[] = "<i class='fa fa-close'></i> Datoteka " . $_FILES['upload']['name'][$index] . " nije validan XML i ima sljedeće pogreške:"; 
-      libxml_display_errors($poruke);
-    }
-
-  }
-else 
-$poruke[] = "<i class='fa fa-close'></i> Datoteka " . $_FILES['upload']['name'][$index] . " nije XML.";
-}
-
+         } else
+             $poruke[] = "<i class='fa fa-close'></i> Datoteka " . $_FILES['upload']['name'][$index] . " nije XML.";
+     }
+ }
 $mapiraneDatoteke = scandir("uploaded/". $folderName . "/output", 1);
 $brojMapiranihDatoteka = count($mapiraneDatoteke);
 if ($brojMapiranihDatoteka == 3) {
@@ -93,7 +84,6 @@ else if ($brojMapiranihDatoteka > 3) {
     $downloadPoruka[] = "<input type='hidden' value='" . $folderName . "' name='folder' id='folder' /><a class='download poveznica' id='zip'>Preuzmite mapirane datoteke</a>";
 }
 }
-kraj:
 
 if(!empty($downloadPoruka)) {
   $_SESSION["progress"] = 100;

@@ -13,6 +13,10 @@ $rootElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:xsi', 'http
 $rootElement->setAttributeNS('http://www.w3.org/2001/XMLSchema-instance' ,'noNamespaceSchemaLocation', 'http://dublincore.org/schemas/xmls/qdc/2008/02/11/simpledc.xsd');
 
 $elementi = $dokument->documentElement->childNodes;
+$progressLoop++;
+$_SESSION["progress"]= $progressLoop / $progress * 100;
+session_write_close();
+session_start();
 if ($elementi->item(1)->nodeName == $prefix . "mods") {
 	$elementi = $elementi->item(1)->childNodes;
 }
@@ -186,6 +190,8 @@ foreach ($elementi as $element) {
 }
 $progressLoop++;
 $_SESSION["progress"]= $progressLoop / $progress * 100;
+session_write_close();
+session_start();
 $novi_dokument->preserveWhiteSpace = false;
 $novi_dokument->formatOutput = true;
 $novi_dokument->save('uploaded/' . $folderName . '/output/' . $saveName .'_output.xml');

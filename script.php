@@ -29,8 +29,6 @@
    $("#mapiraj").click(function() {
            $("#log").css("visibility", "visible");
            getProgress();
-           $("#forma").submit();
-
    });
 
    $("#upload").click(function() {

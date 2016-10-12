@@ -7,4 +7,3 @@ include "examples.php";
 include "mapping.php";   
 include "footer.php";
 include "script.php";
-?>
