@@ -83,11 +83,11 @@ if ($brojMapiranihDatoteka == 3) {
 else if ($brojMapiranihDatoteka > 3) {
     $downloadPoruka[] = "<input type='hidden' value='" . $folderName . "' name='folder' id='folder' /><a class='download poveznica' id='zip'>Preuzmite mapirane datoteke</a>";
 }
+    if(!empty($downloadPoruka)) {
+        $_SESSION["progress"] = 100;
+    }
 }
 
-if(!empty($downloadPoruka)) {
-  $_SESSION["progress"] = 100;
-}
 ?>
 <html class="no-js" lang="en">
   <head>

@@ -42,7 +42,7 @@ foreach ($elementi as $element) {
     	}
     	foreach ($childElements as $childElement) {
     			if ($childElement->nodeName == $prefix . "role") {
-    				    if ($childElement->childNodes->item(1)->nodeValue == "Creator" || $childElement->childNodes->item(1)->nodeValue == "creator" || $childElement->childNodes->item(1)->nodeValue == "cre" || $childElement->childNodes->item(1)->nodeValue == "Cre" || $childElement->childNodes->item(1)->nodeValue == "Author" || $childElement->childNodes->item(1)->nodeValue == "author" || $childElement->childNodes->item(1)->nodeValue == "aut" || $childElement->childNodes->item(1)->nodeValue == "Aut") {
+    				    if (strtoupper($childElement->childNodes->item(1)->nodeValue) == "CREATOR" || strtoupper($childElement->childNodes->item(1)->nodeValue) == "CRE" || strtoupper($childElement->childNodes->item(1)->nodeValue) == "AUTHOR" || strtoupper($childElement->childNodes->item(1)->nodeValue) == "AUT") {
                         $creator = $novi_dokument->createElement("dc:creator", $value);
     				    $rootElement->appendChild($creator);
                         } 
@@ -57,28 +57,45 @@ foreach ($elementi as $element) {
      if ($element->nodeName == $prefix . "subject") {
      	$childElements = $element->childNodes;
     	$values = array();
+         $value = false;
+         $mapirajSubject = false;
+         $mapirajCoverage = false;
     	for ($i = 0; $i < $childElements->length; $i++) {
-    		if ($childElements->item($i)->nodeName !== "#text" && $childElements->item($i)->nodeName !== $prefix . "name" && $childElements->item($i)->nodeName !== $prefix . "geographic" || $childElements->item($i)->nodeName == $prefix . "temoporal" || $childElements->item($i)->nodeName == $prefix . "hierarchicalGeographic" || $childElements->item($i)->nodeName == $prefix . "cartographics") {
-    		$values[] = $childElements->item($i)->nodeValue;
-    		}
-    		else if ($childElements->item($i)->nodeName !== "#text" && $childElements->item($i)->nodeName == $prefix . "name") {
-    			for ($j = 0; $j < $childElements->item($i)->childNodes->length; $j++) {
-    				if ($childElements->item($i)->childNodes->item($j)->nodeName !== "#text") {
-    					$values[] = $childElements->item($i)->childNodes->item($j)->nodeValue;
-    				}
-    			}
-    		}
-    		if ($childElements->item($i)->nodeName == $prefix . "geographic" || $childElements->item($i)->nodeName == $prefix . "temoporal" || $childElements->item($i)->nodeName == $prefix . "hierarchicalGeographic" || $childElements->item($i)->nodeName == $prefix . "cartographics") {
-    		$coverage = $novi_dokument->createElement("dc:coverage", $childElements->item($i)->nodeValue);
-    		$rootElement->appendChild($coverage);
-    		goto classification;
-    		}
-    	}
-    	$value = implode("; ", $values);
-    	$subject = $novi_dokument->createElement("dc:subject", $value);
-    	$rootElement->appendChild($subject);
+            if ($childElements->item($i)->nodeName !== "#text" && $childElements->item($i)->nodeName != $prefix . "name" && $childElements->item($i)->nodeName == $prefix . "topic" || $childElements->item($i)->nodeName == $prefix . "occupation") {
+                $values[] = $childElements->item($i)->nodeValue;
+                $value = implode(", ", $values);
+                $mapirajSubject = true;
+            }
+            else if ($childElements->item($i)->nodeName !== "#text" && $childElements->item($i)->nodeName == $prefix . "name") {
+                for ($j = 0; $j < $childElements->item($i)->childNodes->length; $j++) {
+                    if ($childElements->item($i)->childNodes->item($j)->nodeName !== "#text") {
+                        $values[] = $childElements->item($i)->childNodes->item($j)->nodeValue;
+                        $value = implode(", ", $values);
+                        $mapirajSubject = true;
+                    }
+                }
+            }
+        }
+            if ($mapirajSubject == true) {
+                $subject = $novi_dokument->createElement("dc:subject", $value);
+                $rootElement->appendChild($subject);
+                $value = false;
+            }
+
+         for ($i = 0; $i < $childElements->length; $i++) {
+             if ($childElements->item($i)->nodeName !== "#text" && $childElements->item($i)->nodeName == $prefix . "geographic" || $childElements->item($i)->nodeName == $prefix . "temporal" || $childElements->item($i)->nodeName == $prefix . "hierarchicalGeographic" || $childElements->item($i)->nodeName == $prefix . "cartographics") {
+                 $values[] = $childElements->item($i)->nodeValue;
+                 $value = implode(", ", $values);
+                 $mapirajCoverage = true;
+             }
+         }
+         if ($mapirajCoverage == true) {
+             $coverage = $novi_dokument->createElement("dc:coverage", $value);
+             $rootElement->appendChild($coverage);
+             $value = false;
+         }
     }
-    classification:
+
     if ($element->nodeName == $prefix . "classification") {
     	$subject = $novi_dokument->createElement("dc:subject", $element->nodeValue);
     	$rootElement->appendChild($subject);
