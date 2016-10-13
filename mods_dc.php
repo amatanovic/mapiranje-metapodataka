@@ -20,8 +20,7 @@ session_start();
 if ($elementi->item(1)->nodeName == $prefix . "mods") {
 	$elementi = $elementi->item(1)->childNodes;
 }
-$progressLoop++;
-$_SESSION["progress"]= $progressLoop / $progress * 100;
+
 foreach ($elementi as $element) {
     if ($element->nodeName == $prefix . "titleInfo") {
     	$title = $novi_dokument->createElement("dc:title", $element->childNodes->item(1)->nodeValue);
