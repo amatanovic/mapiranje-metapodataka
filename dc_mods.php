@@ -66,80 +66,75 @@ foreach ($elementi as $element) {
         $role->appendChild($roleTerm);
     }
    if ($element->nodeName == "dc:type") {
-    	if ($element->nodeValue == "collection" || $element->nodeValue == "Collection") {
+    	if (strtoupper($element->nodeValue) == "COLLECTION") {
     		$genre = $novi_dokument->createElement("genre", $element->nodeValue);
     		$genre->setAttribute('authority', 'dct');
     		$rootElement->appendChild($genre);
     	}
-    	else if ($element->nodeValue == "dataset" || $element->nodeValue == "Dataset") {
+    	else if (strtoupper($element->nodeValue) == "DATASET") {
     		$typeOfResource = $novi_dokument->createElement("typeOfResource", "software, multimedia");
     		$genre = $novi_dokument->createElement("genre", "database");
     		$genre->setAttribute('authority', 'dct');
     		$rootElement->appendChild($typeOfResource);
     		$rootElement->appendChild($genre);
     	}
-    	else if ($element->nodeValue == "event" || $element->nodeValue == "Event") {
-    		$genre = $novi_dokument->createElement("genre", $element->nodeValue);
-    		$genre->setAttribute('authority', 'dct');
-    		$rootElement->appendChild($genre);
-    	}
-    	else if ($element->nodeValue == "image" || $element->nodeValue == "Image") {
+    	else if (strtoupper($element->nodeValue) == "IMAGE") {
     		$typeOfResource = $novi_dokument->createElement("typeOfResource", "still image");
     		$genre = $novi_dokument->createElement("genre", $element->nodeValue);
     		$genre->setAttribute('authority', 'dct');
     		$rootElement->appendChild($typeOfResource);
     		$rootElement->appendChild($genre);
     	}
-    	else if ($element->nodeValue == "InteractiveResource" || $element->nodeValue == "interactiveresource" || $element->nodeValue == "Interactive Resource" || $element->nodeValue == "interactive resource" || $element->nodeValue == "interactiveResource") {
+    	else if (strtoupper($element->nodeValue) == "INTERACTIVERESOURCE") {
     		$typeOfResource = $novi_dokument->createElement("typeOfResource", "software, multimedia");
     		$genre = $novi_dokument->createElement("genre", "interactive resource");
     		$genre->setAttribute('authority', 'dct');
     		$rootElement->appendChild($typeOfResource);
     		$rootElement->appendChild($genre);
     	}
-    	else if ($element->nodeValue == "MovingImage" || $element->nodeValue == "movingimage" || $element->nodeValue == "Moving Image" || $element->nodeValue == "moving image" || $element->nodeValue == "movingImage") {
+    	else if (strtoupper($element->nodeValue) == "MOVINGIMAGE") {
     		$typeOfResource = $novi_dokument->createElement("typeOfResource", "moving image");
     		$genre = $novi_dokument->createElement("genre", "moving image");
     		$genre->setAttribute('authority', 'dct');
     		$rootElement->appendChild($typeOfResource);
     		$rootElement->appendChild($genre);
     	}
-      	else if ($element->nodeValue == "PhysicalObject" || $element->nodeValue == "physicalobject" || $element->nodeValue == "Physical Object" || $element->nodeValue == "physical object") {
+      	else if (strtoupper($element->nodeValue) == "PHYSICALOBJECT") {
     		$typeOfResource = $novi_dokument->createElement("typeOfResource", "three dimensional object");
     		$genre = $novi_dokument->createElement("genre", "physical object");
     		$genre->setAttribute('authority', 'dct');
     		$rootElement->appendChild($typeOfResource);
     		$rootElement->appendChild($genre);
     	}
-    	else if ($element->nodeValue == "Service" || $element->nodeValue == "service") {
+    	else if (strtoupper($element->nodeValue) == "SERVICE") {
     		$typeOfResource = $novi_dokument->createElement("typeOfResource", "software, multimedia");
     		$genre = $novi_dokument->createElement("genre", "online system or service");
     		$genre->setAttribute('authority', 'dct');
     		$rootElement->appendChild($typeOfResource);
     		$rootElement->appendChild($genre);
     	}
-    	else if ($element->nodeValue == "Software" || $element->nodeValue == "software") {
+    	else if (strtoupper($element->nodeValue) == "SOFTWARE") {
     		$typeOfResource = $novi_dokument->createElement("typeOfResource", "software, multimedia");
     		$genre = $novi_dokument->createElement("genre", "software");
     		$genre->setAttribute('authority', 'dct');
     		$rootElement->appendChild($typeOfResource);
     		$rootElement->appendChild($genre);
     	}
-   		else if ($element->nodeValue == "Sound" || $element->nodeValue == "sound") {
+   		else if (strtoupper($element->nodeValue) == "SOUND") {
     		$typeOfResource = $novi_dokument->createElement("typeOfResource", "sound recording");
     		$genre = $novi_dokument->createElement("genre", "sound");
     		$genre->setAttribute('authority', 'dct');
     		$rootElement->appendChild($typeOfResource);
     		$rootElement->appendChild($genre);
     	}
-    	else if ($element->nodeValue == "StillImage" || $element->nodeValue == "stillimage" || $element->nodeValue == "Still Image" || $element->nodeValue == "still image") {
+    	else if (strtoupper($element->nodeValue) == "STILLIMAGE") {
     		$typeOfResource = $novi_dokument->createElement("typeOfResource", "still image");
     		$genre = $novi_dokument->createElement("genre", "still image");
     		$genre->setAttribute('authority', 'dct');
     		$rootElement->appendChild($typeOfResource);
     		$rootElement->appendChild($genre);
     	}
-    	else if ($element->nodeValue == "Text" || $element->nodeValue == "text") {
+    	else if (strtoupper($element->nodeValue) == "TEXT") {
     		$typeOfResource = $novi_dokument->createElement("typeOfResource", "text");
     		$genre = $novi_dokument->createElement("genre", "text");
     		$genre->setAttribute('authority', 'dct');
@@ -188,24 +183,22 @@ foreach ($elementi as $element) {
     	$note = $novi_dokument->createElement("note", $element->nodeValue);
     	$rootElement->appendChild($note);
     }
-    if ($element->nodeName == "dc:publisher") { 
+    if ($element->nodeName == "dc:publisher" || $element->nodeName == "dc:date") {
     	$search_originInfo = $novi_dokument->getElementsByTagName('originInfo');
     	if ($search_originInfo->length == 0) {
     	$originInfo = $novi_dokument->createElement("originInfo");
     	$rootElement->appendChild($originInfo);
     	}
-    	$publisher = $novi_dokument->createElement("publisher", $element->nodeValue);
-    	$originInfo->appendChild($publisher);
+    	if ($element->nodeName == "dc:publisher") {
+            $publisher = $novi_dokument->createElement("publisher", $element->nodeValue);
+            $originInfo->appendChild($publisher);
+        }
+        else if ($element->nodeName == "dc:date") {
+            $dateOther = $novi_dokument->createElement("dateOther", $element->nodeValue);
+            $originInfo->appendChild($dateOther);
+        }
     }
-    if ($element->nodeName == "dc:date") { 
-    	$search_originInfo = $novi_dokument->getElementsByTagName('originInfo');
-    	if ($search_originInfo->length == 0) {
-    	$originInfo = $novi_dokument->createElement("originInfo");
-    	$rootElement->appendChild($originInfo);
-    	}
-    	$dateOther = $novi_dokument->createElement("dateOther", $element->nodeValue);
-    	$originInfo->appendChild($dateOther);
-    }
+
     if ($element->nodeName == "dc:language") { 
     $search_language = $novi_dokument->getElementsByTagName('language');
    	if ($search_language->length == 0) {
@@ -327,7 +320,7 @@ foreach ($elementi as $element) {
             $rootElement->appendChild($identifier);
             $identifier->setAttribute('type', 'purl');
         }
-        else if (substr($element->nodeValue, 0, 4) == "ISBN" || substr($element->nodeValue, 0, 4) == "isbn") {
+        else if (strtoupper(substr($element->nodeValue, 0, 4)) == "ISBN") {
             $rootElement->appendChild($identifier);
             $identifier->setAttribute('type', 'isbn');
         }
@@ -341,25 +334,28 @@ foreach ($elementi as $element) {
             $rootElement->appendChild($identifier);
             $identifier->setAttribute('type', 'isbn');
         }
-        else if (substr($element->nodeValue, 0, 4) == "ISRC" || substr($element->nodeValue, 0, 4) == "isrc" || strlen($element->nodeValue) == 12 && $iso3166Checked == 1 || strlen($element->nodeValue) == 15 && strpos($element->nodeValue, '-') !== false || strpos($element->nodeValue, '/') !== false && $iso3166Checked == 1) {
+        else if (strtoupper(substr($element->nodeValue, 0, 4)) == "ISRC" || strlen($element->nodeValue) == 12 && $iso3166Checked == 1 || strlen($element->nodeValue) == 15 && strpos($element->nodeValue, '-') !== false || strpos($element->nodeValue, '/') !== false && $iso3166Checked == 1) {
             $rootElement->appendChild($identifier);
             $identifier->setAttribute('type', 'isrc');
         }
-         else if (substr($element->nodeValue, 0, 4) == "ISSN" || substr($element->nodeValue, 0, 4) == "issn" || strlen($element->nodeValue) == 9 && strpos($element->nodeValue, '-') !== false || strlen($element->nodeValue) == 8) {
+         else if (strtoupper(substr($element->nodeValue, 0, 4)) == "ISSN" || strlen($element->nodeValue) == 9 && strpos($element->nodeValue, '-') !== false || strlen($element->nodeValue) == 8) {
             $rootElement->appendChild($identifier);
             $identifier->setAttribute('type', 'issn');
         }
-         else if (substr($element->nodeValue, 0, 4) == "ISTC" || substr($element->nodeValue, 0, 4) == "istc") {
+         else if (strtoupper(substr($element->nodeValue, 0, 4)) == "ISTC") {
             $rootElement->appendChild($identifier);
             $identifier->setAttribute('type', 'istc');
         }
-        else if (substr($element->nodeValue, 0, 4) == "SICI" || substr($element->nodeValue, 0, 4) == "sici" || substr($element->nodeValue, 0, 1) == "0" || substr($element->nodeValue, 0, 1) == "1" && strpos($element->nodeValue, ';') !== false && strpos($element->nodeValue, '(') !== false && strpos($element->nodeValue, ')') !== false && strpos($element->nodeValue, '<') !== false && strpos($element->nodeValue, '>') !== false) {
+        else if (strtoupper(substr($element->nodeValue, 0, 4)) == "SICI" || substr($element->nodeValue, 0, 1) == "0" || substr($element->nodeValue, 0, 1) == "1" && strpos($element->nodeValue, ';') !== false && strpos($element->nodeValue, '(') !== false && strpos($element->nodeValue, ')') !== false && strpos($element->nodeValue, '<') !== false && strpos($element->nodeValue, '>') !== false) {
             $rootElement->appendChild($identifier);
             $identifier->setAttribute('type', 'sici');
         }
-        else 
+        else {
             $rootElement->appendChild($identifier);
             $identifier->setAttribute('type', 'local');
+        }
+
+
     }
 }
 $progressLoop++;
