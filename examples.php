@@ -97,9 +97,15 @@ else
 <div class="large-6 columns">
 <pre>
   <code class="xml">
-<?php 
-$putanja = "uploaded/" . $_GET["id"] . "/" . scandir("uploaded/". $_GET["id"], 1)[1];
-$dokument = file_get_contents($putanja);
+<?php
+$putanja = "uploaded/" . $_GET["id"];
+$datoteke = scandir($putanja, 1);
+foreach ($datoteke as $datoteka) {
+  $naziv = pathinfo("uploaded/" . $_GET["id"] . "/" . $datoteka, PATHINFO_BASENAME);
+  if (explode("_output", $_GET["name"])[0] . ".xml" == $naziv) {
+    $dokument = file_get_contents($putanja . "/" . $naziv);
+  }
+}
 $izmjena = array('<', '>', '"');
 $izmijeniti = array('&lt;', '&gt;', '&quot;');
 $noviDokument = str_replace($izmjena, $izmijeniti, $dokument);
