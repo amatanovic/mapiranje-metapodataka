@@ -5,7 +5,7 @@
                 Diplomski rad na temu Razvoj programskog rješenja za mapiranje shema metapodataka, izrađen 2016. godine
                 omogućuje automatsko mapiranje iz Dublin Core sheme u MODS i obrnuto. Potrebno je samo priložiti datoteke
                 i kada se mapiranje završi, dobit ćete poveznicu za preuzimanje dokumenata. Aplikacija će prije procesa mapiranja
-                provjeriti valjanost prema XSD shemi i ukoliko dokument ima pogrešaka, reći će točno što nije ispravno. Prilikom
+                provjeriti valjanost prema pripadnim XML Schemama i ukoliko dokument ima pogrešaka, reći će točno što nije ispravno. Prilikom
                 mapiranja se konzultiraju normativne datoteke osobnih imena Kongresne knjižnice te ISO standardi za kodove država i jezika.
             </p>
         </div>

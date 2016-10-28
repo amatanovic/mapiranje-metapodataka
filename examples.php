@@ -102,7 +102,7 @@ $putanja = "uploaded/" . $_GET["id"];
 $datoteke = scandir($putanja, 1);
 foreach ($datoteke as $datoteka) {
   $naziv = pathinfo("uploaded/" . $_GET["id"] . "/" . $datoteka, PATHINFO_BASENAME);
-  if (explode("_output", $_GET["name"])[0] . ".xml" == $naziv) {
+  if (substr($_GET["name"], 0, strlen($_GET["name"]) - 7) . ".xml" == $naziv) {
     $dokument = file_get_contents($putanja . "/" . $naziv);
   }
 }
